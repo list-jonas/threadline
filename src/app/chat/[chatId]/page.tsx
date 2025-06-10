@@ -11,7 +11,14 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ChatInterface } from "@/components/chat/chat-interface";
 import React from "react";
 
-const ChatPage = () => {
+interface ChatPageProps {
+  params: {
+    chatId: string;
+  };
+}
+
+const ChatPage = async ({ params }: ChatPageProps) => {
+  const { chatId } = await params;
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
@@ -23,9 +30,7 @@ const ChatPage = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/">
-                Threadline
-              </BreadcrumbLink>
+              <BreadcrumbLink href="/">Threadline</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem>
@@ -35,7 +40,7 @@ const ChatPage = () => {
         </Breadcrumb>
       </header>
       <div className="flex flex-1 flex-col h-[calc(100vh-4rem)]">
-        <ChatInterface />
+        <ChatInterface chatId={chatId} />
       </div>
     </>
   );

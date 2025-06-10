@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BadgeCheck,
   Bell,
@@ -23,18 +25,30 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { fetchQuery } from "convex/nextjs";
-import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
+import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { SignOut } from "../sign-out";
 import Link from "next/link";
 
-export default async function NavUser() {
-  const user = await fetchQuery(
-    api.users.currentUser,
-    {},
-    { token: await convexAuthNextjsToken() }
-  );
+export default function NavUser() {
+  const user = useQuery(api.users.currentUser);
+
+  if (!user) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg">
+            <Avatar className="h-8 w-8 rounded-lg">
+              <AvatarFallback className="rounded-lg">...</AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-medium">Loading...</span>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
 
   return (
     <SidebarMenu>
